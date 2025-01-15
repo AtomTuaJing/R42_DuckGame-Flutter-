@@ -1,9 +1,8 @@
 import 'package:duck_game/game/duck_game.dart';
 import 'package:flutter/material.dart';
-import 'package:web_socket_channel/web_socket_channel.dart';
 
 class MainMenu extends StatefulWidget {
- const MainMenu({super.key, required this.duckgame});
+  const MainMenu({super.key, required this.duckgame});
 
   final DuckGame duckgame;
   static const id = "MainMenu";

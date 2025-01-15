@@ -1,9 +1,12 @@
+import 'dart:io';
+
 import 'package:duck_game/game/assets.dart';
 import 'package:duck_game/game/duck_game.dart';
 import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
 import 'package:flame/events.dart';
 import 'package:flame/flame.dart';
+import 'package:watcher/watcher.dart';
 import 'package:web_socket_channel/web_socket_channel.dart';
 
 class Duck extends SpriteComponent with HasGameRef<DuckGame>, DragCallbacks {
@@ -11,6 +14,8 @@ class Duck extends SpriteComponent with HasGameRef<DuckGame>, DragCallbacks {
 
   int score = 0;
   int id = 0;
+
+  late FileWatcher fileWatcher;
 
   @override
   Future<void> onLoad() async {
@@ -20,13 +25,25 @@ class Duck extends SpriteComponent with HasGameRef<DuckGame>, DragCallbacks {
 
     add(CircleHitbox());
 
-    final ws = WebSocketChannel.connect(Uri.parse("ws://127.0.0.1:8000/ws"));
+    final filePath =
+        "/Users/atomtuajing/Documents/duck_game/R42_DuckGame-Flutter-/Flutter/duck_game/assets/data.txt"; // fix file path
+    final file = File(filePath);
 
-    await ws.ready;
-
-    ws.stream.listen((receivePosition) {
-      position = Vector2(gameRef.size.x - 200, double.parse(receivePosition.toString().split("(")[1].split(")")[0]));
-    });
+    if (await file.exists()) {
+      print("file existed");
+      final directory = file.parent;
+      directory.watch().listen((event) async {
+        print("hello");
+        if (event.type == FileSystemEvent.modify && event.path == filePath) {
+          try {
+            final newContent = await file.readAsString();
+            print(newContent);
+          } catch (e) {
+            print(e);
+          }
+        }
+      });
+    }
   }
 
   @override

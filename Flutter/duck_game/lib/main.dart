@@ -12,7 +12,7 @@ void main() async {
   await windowManager.ensureInitialized();
 
   WindowOptions windowOptions = WindowOptions(
-    size: Size(1980, 1080),
+    size: Size(1280, 720),
     center: true,
   );
 
@@ -23,11 +23,11 @@ void main() async {
 
   final game = DuckGame();
 
-  runApp(
-    GameWidget(game: game, initialActiveOverlays: [MainMenu.id], overlayBuilderMap: {
-      "MainMenu": (context, _) => MainMenu(duckgame: game),
-      "GameOver": (context, _) => GameOver(duckgame: game),
-      "Info": (context, _) => Info(duckgame: game),
-    })
-  );
+  runApp(GameWidget(game: game, initialActiveOverlays: [
+    MainMenu.id
+  ], overlayBuilderMap: {
+    "MainMenu": (context, _) => MainMenu(duckgame: game),
+    "GameOver": (context, _) => GameOver(duckgame: game),
+    "Info": (context, _) => Info(duckgame: game),
+  }));
 }
